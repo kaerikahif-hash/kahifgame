@@ -138,6 +138,8 @@ body.touch #keys{display:none!important}
 #endbody .en{color:#9fd3ff}
 #endbody .ec{text-align:center;margin-top:5px}
 #endbody .el{float:right;width:58px;height:auto;margin:0 0 4px 10px;border:1px solid var(--cream)}
+/* 「KAHIF 소개 & 예약 안내」 QR 코드: 다른 기기로 찍을 수 있게 크게, 흐려지지 않게 그린다 */
+#endbody .el.qr{width:96px;background:#fff;padding:1px;margin:-2px 0 2px 10px;image-rendering:auto}
 #endbody .et{display:grid;grid-template-columns:auto 1fr;gap:2px 10px;margin-top:5px;border-top:1px solid #4a3f86;padding-top:5px}
 #endbody .et span{color:#9fd3ff;white-space:nowrap}
 /* RMS 방사선 감시 화면 */
@@ -1313,7 +1315,7 @@ function showPages(pages){return new Promise(res=>{let i=0,t0=time;uiMode='end';
  showPages.next=()=>{if(time-t0<.4)return;t0=time;if(++i<pages.length){sfx.ok();put();}else{$('end').style.display='none';uiMode=null;showPages.next=null;res();}};});}
 // 엔딩 안내: 실제 시설 소개, 앞으로의 계획, 이용 안내, 성적. 수치는 브로슈어·배너·보도자료 기준
 function endPages(){const t=total();return[
- `<img class="el" src="assets/KAHIF_logo.png" alt=""><div class="eh">KAHIF는 실제로 있는 시설입니다</div>
+ `<img class="el qr" src="assets/kahif_qr.png" alt="KAHIF 소개 &amp; 예약 안내 QR 코드"><div class="eh">KAHIF는 실제로 있는 시설입니다</div>
   <div>한국원자력연구원 중이온빔조사시설<br><span class="en">KAERI Heavy-ion Irradiation Facility</span></div>
   <ul style="margin-top:6px"><li>이온빔을 재료에 쏘아, 원자로와 핵융합로 재료가 받는 <b>조사 손상</b>을 짧은 시간에 만들어 내는 시설입니다.</li>
   <li>헬륨(He), 아르곤(Ar), 철(Fe) 이온빔을 씁니다. 철 이온빔은 <b>Fe¹³⁺ 약 9.6 MeV, 약 1 μA</b>입니다.</li>
