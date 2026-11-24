@@ -623,12 +623,13 @@ function solid(m,x,y,w=1,h=1){for(let j=y;j<y+h;j++)for(let i=x;i<x+w;i++)if(i>=
 function prop(m,cvs,x,y,base){m.props.push({cv:cvs,x,y,base:base===undefined?y+cvs.height:base});return cvs;}
 
 // 실험 탁자와 그 위의 공구: 펜치(빨간 손잡이), 드라이버(노란 손잡이), 스패너, 작은 부품 상자
-function bWork(){const[cvs,c]=mk(32,29);shadow(c,1,24,30,5);
- R(c,0,3,32,23,INK);R(c,1,4,30,13,'#b9c0cc');R(c,1,4,30,1,'#e3e8ef');R(c,1,17,30,8,'#6a7284');R(c,1,24,30,1,'#4a5060');R(c,3,18,2,7,'#3a3f4c');R(c,27,18,2,7,'#3a3f4c');
- R(c,3,6,2,5,'#c8332f');R(c,6,6,2,5,'#c8332f');R(c,4,10,3,2,'#8e96a3');R(c,5,12,1,3,'#5f6675');R(c,4,12,1,2,'#5f6675');R(c,6,12,1,2,'#5f6675'); // 펜치
- R(c,10,7,5,3,'#f2c230');R(c,10,7,5,1,'#ffe27a');R(c,15,8,7,1,'#8e96a3');R(c,21,8,1,1,'#3a3f4c'); // 드라이버
- R(c,10,12,9,2,'#aab2be');R(c,9,11,2,4,'#aab2be');R(c,9,12,1,2,'#b9c0cc');R(c,18,11,3,4,'#aab2be');R(c,19,12,1,2,'#b9c0cc'); // 스패너
- R(c,24,6,6,8,INK);R(c,25,7,4,6,'#3a8fc8');R(c,25,7,4,1,'#8fd3f5');R(c,26,9,2,1,'#f4f1e6');return cvs;}
+// 세로로 놓은 탁자(가로 한 칸, 세로 두 칸). 위에서부터 부품 상자, 드라이버, 스패너, 펜치
+function bWork(){const[cvs,c]=mk(16,42);shadow(c,1,37,14,5);
+ R(c,0,2,16,37,INK);R(c,1,3,14,28,'#b9c0cc');R(c,1,3,14,1,'#e3e8ef');R(c,1,31,14,7,'#6a7284');R(c,1,37,14,1,'#4a5060');R(c,2,32,2,6,'#3a3f4c');R(c,12,32,2,6,'#3a3f4c');
+ R(c,3,5,7,6,INK);R(c,4,6,5,4,'#3a8fc8');R(c,4,6,5,1,'#8fd3f5');R(c,5,8,3,1,'#f4f1e6'); // 부품 상자
+ R(c,11,5,3,5,'#f2c230');R(c,11,5,1,5,'#ffe27a');R(c,12,10,1,6,'#8e96a3');R(c,12,15,1,1,'#3a3f4c'); // 드라이버
+ R(c,5,13,2,9,'#aab2be');R(c,4,12,4,2,'#aab2be');R(c,5,12,2,1,'#b9c0cc');R(c,4,21,4,3,'#aab2be');R(c,5,22,2,1,'#b9c0cc'); // 스패너
+ R(c,9,19,2,5,'#c8332f');R(c,12,19,2,5,'#c8332f');R(c,10,23,3,2,'#8e96a3');R(c,11,25,1,3,'#5f6675');R(c,10,25,1,2,'#5f6675');R(c,12,25,1,2,'#5f6675');return cvs;} // 펜치
 function bIlk(c,x,y){R(c,x,y,10,8,'#2e3340');R(c,x+1,y+1,8,6,'#f2c230');disc(c,x+5,y+4,2,'#c8332f');}
 const ilkInfo=()=>sys(['[[인터록 버튼]](Emergency Interlock Button). 노란 상자 안의 빨간 버튼이다.','누르면 인터록이 걸려 가속기 장치가 바로 멈춘다. 위험한 일이 생겼을 때 쓰는 [[긴급 안전장치]]다.','조사시험실, 이온원실, 제어실에 하나씩 있다. (지금은 누르지 않는다.)']);
 function buildHall(){
@@ -693,8 +694,8 @@ function buildHall(){
  prop(m,bMW(),848,140,176);solid(m,53,9,1,2);prop(m,bWG(),834,160,225);
  prop(m,bCab1(32,BX.blu,true),56*T,28,64);solid(m,56,3,2,1);
  prop(m,bShelf(),928,134,176);solid(m,58,9,1,2);
- // 차폐실 안의 실험 탁자 (56~57열, 12행): 펜치, 드라이버, 스패너 같은 공구가 놓여 있다
- prop(m,bWork(),56*T,12*T-11,13*T);solid(m,56,12,2,1);
+ // 차폐실 안의 실험 탁자 (58열, 6~7행): 페로센 선반(58열, 9~10행)과 같은 벽을 따라 일렬로, 한 칸(8행)을 띄우고 놓았다. 펜치, 드라이버, 스패너 같은 공구가 놓여 있다
+ prop(m,bWork(),58*T,6*T-9,8*T);solid(m,58,6,1,2);
  prop(m,bCool(),32,226,288);solid(m,2,15,5,3);
  prop(m,bBench(),400,240,272);solid(m,25,16,3,1);
  prop(m,bBanner(),593,224,256);solid(m,37,15);
@@ -726,7 +727,7 @@ function buildHall(){
   {x:AMPX,y:12,w:4,h:2,label:'RF 증폭기',act:fl('[[고주파 증폭기]](RF Amplifier). RFQ에 최대 350 kW의 고주파 전력을 보낸다.','RF 출력은 [[코액셜 도파관]](Coaxial Waveguide)을 타고 바로 뒤의 RFQ로 간다.')},
   ...CABG.map(([a,b])=>({x:a,y:12,w:b-a+1,h:2,label:'전원·제어 캐비닛',act:fl('전원·제어 캐비닛. 빔라인 바로 앞에 줄지어 서서 전자석과 진공 펌프에 전기를 보낸다.')})),
   {x:9,y:3,w:12,h:2,label:'공구보관함',act:fl('KAHIF 시설 유지/보수/수리를 위한 [[공구보관함]](Tool Box Storage)이다.')},
-  {x:56,y:12,w:2,h:1,label:'실험 탁자',act:fl('실험 탁자. 펜치, 드라이버, 스패너 같은 공구가 놓여 있다.')},
+  {x:58,y:6,w:1,h:2,label:'실험 탁자',act:fl('실험 탁자. 펜치, 드라이버, 스패너 같은 공구가 놓여 있다.')},
   {x:32,y:3,w:15,h:2,label:'2층 랙',act:fl('파란 철골 구조물에 2층으로 쌓은 장비 랙. 전원 장치와 계측 장비가 들어 있다.')},
   ...[[7,9,1],[7,12,4]].map(([x,y,h])=>({x,y,w:1,h,label:'냉각수 배관',act:fl('[[냉각수 배관]]. 냉각 시스템의 찬물을 가속기와 전자석으로 보내고, 열을 받아 데워진 물을 다시 받아 온다.','물 배관은 머리 위로 가는 전원선과 달리 바닥으로 지나간다. 통로는 발판 밑으로 건너고, HEBT 받침대 밑을 지나 IH-DTL 바닥에서 탱크로 올라간다.')})),
   {x:4,y:2,w:5,h:1,label:'KAHIF 현판',act:fl('[[KAHIF]] — KAERI Heavy-ion Irradiation Facility.','처음 이름은 DIAC(Daejeon Ion Accelerator Complex)였다.')},
@@ -775,9 +776,9 @@ function buildCtrl(){
  prop(m,bRack(),304,28,64);solid(m,19,3,2,1);
  prop(m,bTable(),144,104,144);solid(m,9,7,4,2); // 회의 탁자는 7~8행. 출입구 앞(9~10행)을 비워 드나들기 쉽게 한 칸 뒤로 물렸다
  prop(m,bPlant(),16,148,176);solid(m,1,10);prop(m,bPlant(),320,148,176);solid(m,20,10);
- prop(m,bMinDesk(),32,90,128);solid(m,2,7,3,1); // 시편 확인대·시뮬레이션 컴퓨터 책상 (2~4열, 7행). 김민욱은 그 앞(3,8)에 선다
+ prop(m,bMinDesk(),32,90,128);solid(m,2,7,3,1); // 시편 확인대·시뮬레이션 컴퓨터 책상 (2~4열, 7행). 김민욱은 시뮬레이션 컴퓨터 앞(4,8)에 선다
  prop(m,bSimDesk(),272,74,112);solid(m,17,6,3,1);
- m.npcs=[{id:'ds',x:11,y:5,dir:'down'},{id:'mw',x:3,y:8,dir:'up'},{id:'sb',x:7,y:5,dir:'up',when:()=>runDay()},{id:'sb',x:9,y:6,dir:'down',when:()=>!!S.flags.ch5}];
+ m.npcs=[{id:'ds',x:11,y:5,dir:'down'},{id:'mw',x:4,y:8,dir:'up'},{id:'sb',x:7,y:5,dir:'up',when:()=>runDay()},{id:'sb',x:9,y:6,dir:'down',when:()=>!!S.flags.ch5}];
  m.warps=[{x:10,y:11,to:{map:'hall',x:33,y:17,dir:'up'}},{x:11,y:11,to:{map:'hall',x:34,y:17,dir:'up'}},
   {x:4,y:11,to:{map:'lobby',x:7,y:9,dir:'up'}},{x:5,y:11,to:{map:'lobby',x:8,y:9,dir:'up'}}];
  const fl=(...l)=>()=>sys(l);
