@@ -13,7 +13,9 @@
 <style>
 :root{--s:1;--navy:#1b143a;--navy2:#3b2a6e;--or:#e87722;--cream:#f6f1e3;--ink:#1d1730}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-html,body{height:100%;background:#0d0a18;overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none}
+html,body{height:100%;background:#0d0a18;overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;-webkit-text-size-adjust:100%}
+*{touch-action:none}
+input,video{touch-action:manipulation}
 body{font-family:'Galmuri11','Galmuri9','Malgun Gothic','Apple SD Gothic Neo',sans-serif;color:var(--cream)}
 #stage{position:absolute;left:0;top:0;overflow:hidden;background:#000}
 #cv{position:absolute;left:0;top:0;image-rendering:crisp-edges;image-rendering:pixelated}
@@ -180,6 +182,8 @@ body.touch #keys{display:none!important}
 #mg.sim #mginfo .dp{margin-top:3px;padding:1px 2px 0;border-top:1px solid #4a3f86;white-space:nowrap}
 #mg.rep #mginfo{display:none}
 #nameform input{font:inherit;width:84px;margin:4px 4px 0 0;padding:1px 4px;background:#f6f1e3;color:#1d1730;border:1px solid #1d1730;border-radius:2px;outline:none;user-select:text;-webkit-user-select:text}
+/* 아이폰은 글자 크기가 16px보다 작은 입력 칸을 누르면 화면을 자동으로 확대한다. 글자를 16px로 두고 칸을 75%로 줄여 그린다 */
+#nameform input{font-size:16px;line-height:20px;width:112px;transform:scale(.75);transform-origin:0 60%;margin:1px -24px -2px 0}
 #nameform button{font:inherit;padding:1px 8px;background:var(--or);color:#1d1730;border:1px solid #1d1730;border-radius:2px;cursor:pointer}
 .tfoot{position:absolute;left:0;right:0;bottom:16px;color:#b9b2de}
 .thelp{position:absolute;left:0;right:0;bottom:4px;color:#8f88bb}
@@ -1417,6 +1421,22 @@ addEventListener('blur',()=>{held.length=0;});
 // pointer / touch
 if(matchMedia('(pointer:coarse)').matches)document.body.classList.add('touch');
 addEventListener('touchstart',()=>document.body.classList.add('touch'),{once:true,passive:true});
+/* 아이폰 Safari의 화면 확대 막기. Safari는 viewport의 user-scalable=no를 따르지 않아서, 화면이나 버튼을 빠르게 두 번 누르면
+   페이지가 확대되고 손가락으로 되돌릴 수도 없다(touch-action:none이라 오므리기가 막혀 있다). 그래서
+   ① 두 번째 터치의 기본 동작(확대)을 막고 누름은 직접 전달하고, ② 두 손가락 확대 제스처를 막고,
+   ③ 그래도 확대됐으면 viewport 설정을 다시 써서 원래 배율로 되돌린다. 이름 입력 칸과 영상은 건드리지 않는다 */
+{const free=t=>t&&t.closest&&t.closest('input,video');let lastEnd=0;
+ document.addEventListener('touchend',e=>{const now=performance.now(),dbl=now-lastEnd<400;lastEnd=now;
+  if(dbl&&!free(e.target)&&e.cancelable){e.preventDefault();if(e.target&&e.target.click)e.target.click();}},{passive:false});
+ document.addEventListener('touchstart',e=>{if(e.touches.length>1&&e.cancelable)e.preventDefault();},{passive:false});
+ for(const ev of['gesturestart','gesturechange','gestureend'])document.addEventListener(ev,e=>e.preventDefault(),{passive:false});
+ document.addEventListener('dblclick',e=>{if(!free(e.target))e.preventDefault();},{passive:false});
+ const vv=window.visualViewport,meta=document.querySelector('meta[name=viewport]'),base=meta&&meta.content;let fixing=false;
+ const unzoom=()=>{if(!vv||!meta||fixing||vv.scale<=1.02||free(document.activeElement))return;fixing=true;
+  meta.content='width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover';
+  setTimeout(()=>{meta.content=base;fixing=false;},350);};
+ if(vv){vv.addEventListener('resize',unzoom);vv.addEventListener('scroll',unzoom);}
+ $('nameinp').addEventListener('blur',()=>setTimeout(unzoom,120));}
 for(const b of document.querySelectorAll('#pad div')){const d=b.dataset.d;
  const up=()=>{const i=held.indexOf(d);if(i>=0)held.splice(i,1);};
  b.addEventListener('pointerdown',e=>{e.preventDefault();if(!held.includes(d))held.push(d);onDir(d);});
