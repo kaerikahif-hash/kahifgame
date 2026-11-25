@@ -980,9 +980,10 @@ const wait=ms=>new Promise(r=>setTimeout(r,ms));
 const esc=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 
 /* ================= audio ================= */
-const bgm=new Audio('assets/road_to_kahif.mp3');bgm.loop=true;bgm.volume=.4;bgm.preload='auto';
+const bgm=new Audio('assets/road_to_kahif.mp3');bgm.loop=true;bgm.volume=.34;bgm.preload='auto'; // 배경음악 음량: 0.4에서 15% 낮춤
+const SFXV=1.1; // 효과음 음량 배율: 10% 올림
 let AC=null;
-function tone(f,d,when=0,type='square',v=.035){if(S.muted)return;try{AC=AC||new(window.AudioContext||window.webkitAudioContext)();const t=AC.currentTime+when,o=AC.createOscillator(),ga=AC.createGain();o.type=type;o.frequency.value=f;ga.gain.setValueAtTime(v,t);ga.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(ga);ga.connect(AC.destination);o.start(t);o.stop(t+d+.02);}catch(e){}}
+function tone(f,d,when=0,type='square',v=.035){if(S.muted)return;try{AC=AC||new(window.AudioContext||window.webkitAudioContext)();const t=AC.currentTime+when,o=AC.createOscillator(),ga=AC.createGain();o.type=type;o.frequency.value=f;ga.gain.setValueAtTime(v*SFXV,t);ga.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(ga);ga.connect(AC.destination);o.start(t);o.stop(t+d+.02);}catch(e){}}
 const sfx={blip:()=>tone(820,.03,0,'square',.01),ok:()=>tone(660,.06),move:()=>tone(520,.04,0,'square',.02),
  jingle:()=>[523,659,784,1047].forEach((f,i)=>tone(f,.16,i*.09)),
  secret:()=>[784,988,1175,1568,1976].forEach((f,i)=>tone(f,.14,i*.07,'triangle',.07)),
